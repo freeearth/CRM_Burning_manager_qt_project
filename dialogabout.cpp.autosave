@@ -1,0 +1,40 @@
+#include "dialogabout.h"
+#include "ui_dialogabout.h"
+
+DialogAbout::DialogAbout(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::DialogAbout)
+{
+    setWindowIcon(QIcon("stranger.png"));
+    ui->setupUi(this);
+    this->installEventFilter(this);
+    ui->textEdit->installEventFilter(this);
+    ui->textEdit->viewport()->installEventFilter(this);
+}
+
+
+bool DialogAbout::eventFilter(QObject *obj, QEvent *event) {
+    if ((obj == ui->textEdit || obj == ui->textEdit->viewport()) &&
+            event->type() == QEvent::MouseButtonDblClick)
+       {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            int x = mouseEvent->x();
+            int y = mouseEvent->y();//821 671
+            int fun_x = qrand() %800 + 20;
+            int fun_y = qrand() %600 + 20;
+            if (x == 0 && y == 0) {
+                DialogFunForm *Fun_form = new DialogFunForm();
+                QImage *image_fun = new QImage(431,378,QImage::Format_RGB888);
+
+                //Fun_form->SetLabel_PixMap(image_fun);
+                Fun_form->exec();
+            }
+            //Additional::ShowMessage("X: " + QString::number(mouseEvent->x()) + "Y:" +  QString::number(mouseEvent->y()));
+       }
+    return false;
+}
+
+DialogAbout::~DialogAbout()
+{
+    delete ui;
+}
